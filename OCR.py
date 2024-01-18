@@ -65,7 +65,18 @@ class OCR:
     def translate_window(self):
         translate_window = tk.Toplevel(self.root)
         translate_window.title("Translate Text")
-        translate_window.geometry("1000x200")
+
+        window_width = 400
+        window_height = 200
+        translate_window.geometry(f"{window_width}x{window_height}")
+
+        screen_width = translate_window.winfo_screenwidth()
+        screen_height = translate_window.winfo_screenheight()
+
+        x = (screen_width / 2) - (window_width / 2)
+        y = (screen_height / 2) - (window_height / 2)
+
+        translate_window.geometry(f"+{int(x)}+{int(y)}")
 
         language = tk.StringVar(translate_window)
         language.set("es")
@@ -75,8 +86,8 @@ class OCR:
 
         whitespace = tk.Label(translate_window, text="")
         whitespace.pack()
-
-        dropdown = ttk.OptionMenu(translate_window, language, "es", *LANGUAGES.keys())
+        language_list = list(LANGUAGES.values())
+        dropdown = ttk.OptionMenu(translate_window, language, "es", *language_list)
         dropdown.pack()
 
         whitespace = tk.Label(translate_window, text="")
