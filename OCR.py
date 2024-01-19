@@ -18,12 +18,17 @@ class OCR:
         self.menubar = tk.Menu(self.root)
 
         self.file_menu = tk.Menu(self.menubar, tearoff=0)
-        self.file_menu.add_command(label="Download OCR", command=self.write_file_ocr)
+        self.file_menu.add_command(label="Quit App", command=self.quit_app)
+        self.file_menu.add_command(label="Quit Immediately", command=self.quit_app_imm)
 
-        self.file_menu.add_separator()
-        self.file_menu.add_command(label="Download Translation", command=self.write_file_trans)
+        self.download_menu = tk.Menu(self.menubar, tearoff=0)
+        self.download_menu.add_command(label="Download OCR", command=self.write_file_ocr)
 
-        self.menubar.add_cascade(menu=self.file_menu, label="Download")
+        self.download_menu.add_separator()
+        self.download_menu.add_command(label="Download Translation", command=self.write_file_trans)
+
+        self.menubar.add_cascade(menu=self.file_menu, label="File")
+        self.menubar.add_cascade(menu=self.download_menu, label="Download")
 
         self.root.config(menu=self.menubar)
 
@@ -52,6 +57,8 @@ class OCR:
         self.textbox2.pack(padx=10, pady=10)
 
         self.filename = ""
+
+        self.root.protocol("WM_DELETE_WINDOW", self.quit_app)
 
         self.root.mainloop()
 
@@ -159,6 +166,13 @@ class OCR:
                                                   "Please translate text and try again.", font=("Arial", 30),
                                   wraplength=window_width, foreground="red")
             error_msg.pack()
+
+    def quit_app(self):
+        if messagebox.askyesno(title="Close Application?", message="Are you sure you want to exit?"):
+            self.root.destroy()
+
+    def quit_app_imm(self):
+        self.root.destroy()
 
 
 OCR()
