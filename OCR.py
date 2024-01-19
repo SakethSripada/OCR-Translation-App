@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 from PIL import Image
 from googletrans import Translator, LANGUAGES
+import pyttsx3
 
 
 class OCR:
@@ -50,6 +51,9 @@ class OCR:
 
         self.translate_button = ttk.Button(self.root, text="TRANSLATE", command=self.translate_window)
         self.translate_button.pack()
+
+        self.speak_button = ttk.Button(self.root, text="HEAR TEXT", command=self.speak_text)
+        self.speak_button.pack()
 
         self.textbox = tk.Text(self.root, height=5.5, font=("Arial", 16), foreground="black", background="white")
         self.textbox.pack(padx=10, pady=10)
@@ -174,6 +178,12 @@ class OCR:
 
     def quit_app_imm(self):
         self.root.destroy()
+
+    def speak_text(self):
+        engine = pyttsx3.init()
+        text = self.textbox.get("1.0", tk.END)
+        engine.say(text)
+        engine.runAndWait()
 
 
 OCR()
