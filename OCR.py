@@ -15,6 +15,18 @@ class OCR:
 
         ttk.Label(self.root, text="OCR Application", font=("Arial", 18)).pack()
 
+        self.menubar = tk.Menu(self.root)
+
+        self.file_menu = tk.Menu(self.menubar, tearoff=0)
+        self.file_menu.add_command(label="Download OCR", command=self.write_file_ocr)
+
+        self.file_menu.add_separator()
+        self.file_menu.add_command(label="Download Translation", command=self.write_file_trans)
+
+        self.menubar.add_cascade(menu=self.file_menu, label="Download")
+
+        self.root.config(menu=self.menubar)
+
         self.whitespace = tk.Label(self.root, text="")
         self.whitespace.pack()
 
@@ -87,7 +99,7 @@ class OCR:
         whitespace = tk.Label(translate_window, text="")
         whitespace.pack()
         language_list = list(LANGUAGES.values())
-        dropdown = ttk.OptionMenu(translate_window, language, "es", *language_list)
+        dropdown = ttk.OptionMenu(translate_window, language, "spanish", *language_list)
         dropdown.pack()
 
         whitespace = tk.Label(translate_window, text="")
@@ -103,6 +115,50 @@ class OCR:
         translated_text = translator.translate(original_text, dest=lang_code).text
         self.textbox2.delete("1.0", tk.END)
         self.textbox2.insert(tk.END, translated_text)
+
+    def write_file_ocr(self):
+        text_content = self.textbox.get("1.0", tk.END)
+        if text_content.strip():
+            file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt"),
+                                                                                         ("All files", "*.*")])
+            if file_path:
+                with open(file_path, "w") as file:
+                    file.write(text_content)
+        else:
+            error_win = tk.Toplevel(self.root)
+            error_win.title("ERROR")
+
+            window_width = 400
+            window_height = 200
+
+            error_win.geometry(f"{window_width}x{window_height}")
+
+            error_msg = ttk.Label(error_win, text="There is no OCR text to download. "
+                                                  "Please upload an image for OCR and try again.", font=("Arial", 27),
+                                  wraplength=window_width, foreground="red")
+            error_msg.pack()
+
+    def write_file_trans(self):
+        text_content = self.textbox2.get("1.0", tk.END)
+        if text_content.strip():
+            file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt"),
+                                                                                         ("All files", "*.*")])
+            if file_path:
+                with open(file_path, "w") as file:
+                    file.write(text_content)
+        else:
+            error_win = tk.Toplevel(self.root)
+            error_win.title("ERROR")
+
+            window_width = 400
+            window_height = 200
+
+            error_win.geometry(f"{window_width}x{window_height}")
+
+            error_msg = ttk.Label(error_win, text="There is no translated text to download. "
+                                                  "Please translate text and try again.", font=("Arial", 30),
+                                  wraplength=window_width, foreground="red")
+            error_msg.pack()
 
 
 OCR()
