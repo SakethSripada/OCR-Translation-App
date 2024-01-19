@@ -19,6 +19,7 @@ class OCR:
 
         self.file_menu = tk.Menu(self.menubar, tearoff=0)
         self.file_menu.add_command(label="Quit App", command=self.quit_app)
+        self.file_menu.add_separator()
         self.file_menu.add_command(label="Quit Immediately", command=self.quit_app_imm)
 
         self.download_menu = tk.Menu(self.menubar, tearoff=0)
